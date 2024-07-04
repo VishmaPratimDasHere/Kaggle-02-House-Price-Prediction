@@ -11,9 +11,9 @@ import torch.nn as nn
 from torch.optim import SGD as SGD
 
 # Import data
-original=pd.read_csv("./data/train.csv")
+original=pd.read_csv("./train.csv")
 y_train=original["SalePrice"]
-df=pd.read_csv("./data/train.csv")
+df=pd.read_csv("./train.csv")
 
 pd.set_option('display.max_columns',None)
 pd.set_option('display.max_colwidth',None)
@@ -66,13 +66,13 @@ df=df.fillna('None')
 
 
 for col in cat_cols:
-    if len(df[col].unique())>5:                                              # If there are more than 5 type of categories
-        df["encoded_"+col]=df.groupby(col)["SalePrice"].transform("mean")    #     Do target encoding
+    if len(df[col].unique())>5:                                                          # If there are more than 5 type of categories
+        df["encoded_"+col]=df.groupby(col)["SalePrice"].transform("mean")                #     Do target encoding
         weight=0.5
         ovr_avg=df["encoded_"+col].mean()
-        df["encoded_"+col]=[weight*x+(1-weight)*ovr_avg for x in df["encoded_"+col]]                                                  #     TODO: Do smoothing
+        df["encoded_"+col]=[weight*x+(1-weight)*ovr_avg for x in df["encoded_"+col]]     #     TODO: Do smoothing
     else:
-        df=pd.get_dummies(data=df,columns=[col],dtype=int)                   # Else do One Hot Encoding
+        df=pd.get_dummies(data=df,columns=[col],dtype=int)                               # Else do One Hot Encoding
         cat_cols.remove(col)
 
 # Feature engineering done
